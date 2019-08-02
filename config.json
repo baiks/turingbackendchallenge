@@ -1,0 +1,18 @@
+{
+    "Database": {
+        "host": "localhost",
+        "dialect": "mysql",
+        "port": 3306,
+        "dbname": "tshirtshop",
+        "username": "root",
+        "password": "",
+        "connectTimeout":1000,
+        "maxpool":5,
+        "minpool":0,
+        "idle":10000,
+        "acquire":30000
+    },
+    "APIConfigs": {
+        "port": 8081
+    }
+}
