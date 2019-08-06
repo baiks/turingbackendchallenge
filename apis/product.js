@@ -1,7 +1,10 @@
 var express = require('express');
 var db = require('../Models/DBConnection');
 var router = express.Router();
-
+var jwt = require("../AccessTokens/JWT");
+const bodyParser = require('body-parser');
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json())
 /* /products Get All Products*/
 router.get('/products', function (req, res) {
     var response = {
@@ -9,7 +12,6 @@ router.get('/products', function (req, res) {
         "message": "An error occurred.",
         "status": "500"
     }
-
     if (req.query.limit === undefined) {
         req.query.limit = 20;
     } if (req.query.page === undefined) {
@@ -38,7 +40,7 @@ router.get('/products', function (req, res) {
                 "count": parseInt(req.query.limit),
                 "rows": product
             }
-            res.send(response);
+            res.status(200).send(response);
         }
     });
 })
@@ -88,7 +90,7 @@ router.get('/products/search', function (req, res) {
                 "count": parseInt(req.query.limit),
                 "rows": product
             }
-            res.send(response);
+            res.status(200).send(response);
         }
     });
 })
@@ -111,9 +113,9 @@ router.get('/products/:product_id', function (req, res) {
                 "status": "500"
             }
             console.log("Response:: " + JSON.stringify(response));
-            res.send(response);
+            res.status(400).send(response);
         } else {
-            res.send(product);
+            res.status(200).send(product);
         }
     });
 })
@@ -167,7 +169,7 @@ router.get('/products/inCategory/:category_id', function (req, res) {
                 "count": parseInt(req.query.limit),
                 "rows": finalres
             }
-            res.send(response);
+            res.status(201).send(response);
         }
 
     });
@@ -181,6 +183,7 @@ router.get('/products/inDepartment/:department_id', function (req, res) {
         "message": "An error occurred",
         "status": "500"
     }
+
     //Find All
     db.ProductCategory.findAll({
         include: [{
@@ -201,9 +204,9 @@ router.get('/products/inDepartment/:department_id', function (req, res) {
                 "status": "500"
             }
             console.log("Response:: " + JSON.stringify(response));
-            res.send(response);
+            res.status(400).send(response);
         } else {
-            res.send(productcategory[0].category.products);
+            res.status(200).send(productcategory[0].category.products);
         }
 
     });
@@ -217,6 +220,7 @@ router.get('/products/:product_id/details', function (req, res) {
         "message": "An error occurred.",
         "status": "500"
     }
+
     //Find One
     db.Product.findOne({
         where: { product_id: req.params.product_id }
@@ -228,9 +232,9 @@ router.get('/products/:product_id/details', function (req, res) {
                 "status": "500"
             }
             console.log("Response:: " + JSON.stringify(response));
-            res.send(response);
+            res.status(400).send(response);
         } else {
-            res.send(product);
+            res.status(200).send(product);
         }
     });
 });
@@ -274,7 +278,7 @@ router.get('/products/:product_id/locations', function (req, res) {
             response['category_name'] = cat[0].name;
             response['category_id'] = cat[0].category_id;
             response['department_id'] = cat[0].department_id;
-            res.send(response);
+            res.status(200).send(response);
         }
 
     });
@@ -282,55 +286,63 @@ router.get('/products/:product_id/locations', function (req, res) {
 
 /* /products/{product_id}/reviews Get reviews of a Product */
 router.get('/products/:product_id/reviews', function (req, res) {
-    console.log('products: ' + req.params.product_id);
-    //Find One
-    db.Review.findAll({
-        where: {
-            product_id: req.params.product_id
-        }
-    }).then(function (reviews) {
-        if (reviews.length < 1) {
-            var response = {
-                "code": "PROD_02",
-                "message": "Product reviews with this ID: " + req.params.product_id,
+    console.log('Req body: ' + req.body);
+    var response = {
+        "code": "PRD_01",
+        "message": "An error occurred.",
+        "status": "500"
+    }
+
+    if (req.body === undefined) {
+        //Find One
+        db.Review.findAll({
+            where: {
+                product_id: req.params.product_id
+            }
+        }).then(function (reviews) {
+            if (reviews.length < 1) {
+                var response = {
+                    "code": "PROD_02",
+                    "message": "Product reviews with this ID: " + req.params.product_id,
+                    "status": "500"
+                }
+                console.log("Response:: " + JSON.stringify(response));
+                res.status(400).send(response);
+            } else {
+                console.log("Response:: " + JSON.stringify(reviews));
+                res.status(200).send(reviews);
+            }
+
+        });
+    } else {  //Post review
+        if (req.headers["user-key"] === undefined) {
+            response = {
+                "code": "CUST_04",
+                "message": "Missing Authorization key.",
                 "status": "500"
             }
-            console.log("Response:: " + JSON.stringify(response));
-            res.send(response);
-        } else {
-            console.log("Response:: " + JSON.stringify(reviews));
-            res.send(reviews);
+            return res.status(400).send(response);
         }
-
-    });
-});
-/* /products/{product_id}/reviews Getreviews */
-router.post('/products/:product_id/reviews', function (req, res) {
-    console.log('product_id: ' + req.params.product_id);
-    console.log('review : ' + req.query.review);
-    console.log('rating  : ' + req.query.rating);
-    //Find One
-    db.Review.findAll({
-        where: {
-            product_id: req.params.product_id,
-            review: req.query.review,
-            rating: req.query.rating
-        }
-    }).then(function (reviews) {
-        if (reviews.length < 1) {
-            var response = {
-                "code": "PROD_02",
-                "message": "Product reviews not found",
+        if (!jwt.verify(req.headers["user-key"])) {
+            response = {
+                "code": "CUST_03",
+                "message": "Authorization failed.Token is invalid or has expired.",
                 "status": "500"
             }
-            console.log("Response:: " + JSON.stringify(response));
-            res.send(response);
-        } else {
-            console.log("Response:: " + JSON.stringify(reviews));
-            res.send(reviews);
+            return res.status(400).send(response);
         }
-
-    });
+        db.Customer.findOne({
+            where: {
+                user_key: req.headers["user-key"].split(" ")[1],
+            }
+        }).then(function (customer) {
+            req.body.customer_id = customer.customer_id;
+            //create
+            db.Review.create(req.body).then(function (reviews) {
+                res.status(201).send(reviews);
+            });
+        });
+    }
 });
 
 //export this router to use in our index.js

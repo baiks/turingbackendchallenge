@@ -1,14 +1,15 @@
 module.exports = (sequelize, DataTypes) => {
-    const OrderDetail = sequelize.define(
-        'OrderDetail',
+    const ShoppingCart = sequelize.define(
+        'ShoppingCart',
         {
             item_id: {
                 type: DataTypes.INTEGER,
+                allowNull: false,
                 primaryKey: true,
                 autoIncrement: true,
             },
-            order_id: {
-                type: DataTypes.INTEGER,
+            cart_id: {
+                type: DataTypes.STRING(32),
                 allowNull: false,
             },
             product_id: {
@@ -19,23 +20,25 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING(1000),
                 allowNull: false,
             },
-            product_name: {
-                type: DataTypes.STRING(100),
-                allowNull: false,
-            },
             quantity: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
-            unit_cost: {
-                type: DataTypes.DECIMAL(10, 2),
+            buy_now: {
+                type: DataTypes.BOOLEAN,
                 allowNull: false,
+                defaultValue: true,
+            },
+            added_on: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                defaultValue: DataTypes.NOW,
             },
         },
         {
             timestamps: false,
-            tableName: 'order_detail',
+            tableName: 'shopping_cart',
         }
     );
-    return OrderDetail;
+    return ShoppingCart;
 };

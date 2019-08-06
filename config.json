@@ -6,13 +6,17 @@
         "dbname": "tshirtshop",
         "username": "root",
         "password": "",
-        "connectTimeout":1000,
-        "maxpool":5,
-        "minpool":0,
-        "idle":10000,
-        "acquire":30000
+        "connectTimeout": 1000,
+        "maxpool": 5,
+        "minpool": 0,
+        "idle": 10000,
+        "acquire": 30000
     },
     "APIConfigs": {
         "port": 8081
+    },
+    "FacebookApp": {
+        "client_id": "1307380232764848",
+        "client_secret": "23e36713b2b21519ee24a7d44daede0b"
     }
 }

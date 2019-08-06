@@ -7,6 +7,8 @@ var categories = require('./apis/categories.js');
 var attributes = require('./apis/attributes.js');
 var product = require('./apis/product.js');
 var customer = require('./apis/customer.js');
+var orders = require('./apis/orders.js');
+var shoppingcart = require('./apis/shoppingcart.js');
 
 //Define routes here
 app.use('/',
@@ -15,7 +17,9 @@ app.use('/',
     categories,
     attributes,
     product,
-    customer
+    customer,
+    orders,
+    shoppingcart
 );
 
 var server = app.listen(8081, function () {

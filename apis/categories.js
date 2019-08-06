@@ -9,7 +9,6 @@ router.get('/categories', function (req, res) {
         "message": "An error occurred.",
         "status": "500"
     }
-
     if (req.query.limit === undefined) {
         req.query.limit = 20;
     } if (req.query.page === undefined) {
@@ -44,7 +43,11 @@ router.get('/categories', function (req, res) {
 })
 /* /categories/{category_id} Get Category by ID */
 router.get('/categories/:category_id', function (req, res) {
-    console.log('category_id id: ' + req.params.category_id);
+    var response = {
+        "code": "CAT_01",
+        "message": "An error occurred.",
+        "status": "500"
+    }
     //Find One
     db.Category.findOne({
         where: {
@@ -69,9 +72,8 @@ router.get('/categories/:category_id', function (req, res) {
 
 /* /categories/inProduct/{product_id} Get Categories of a Product */
 router.get('/categories/inProduct/:product_id', function (req, res) {
-    console.log('product_id id: ' + req.params.product_id);
     var response = {
-        "code": "PROD_01",
+        "code": "CAT_01",
         "message": "An error occurred",
         "status": "500"
     }
@@ -89,7 +91,7 @@ router.get('/categories/inProduct/:product_id', function (req, res) {
     }).then(function (category) {
         if (category.length < 1) {
             response = {
-                "code": "PROD_01",
+                "code": "CAT_01",
                 "message": "Don't exist product with this ID: " + req.params.product_id,
                 "status": "500"
             }
@@ -105,12 +107,13 @@ router.get('/categories/inProduct/:product_id', function (req, res) {
 });
 /* /categories/inDepartment/{inDepartment} Get Categories of a Department */
 router.get('/categories/inDepartment/:department_id', function (req, res) {
-    console.log('department_id id: ' + req.params.department_id);
+    console.log("");
     var response = {
-        "code": "DEP_02",
+        "code": "CAT_02",
         "message": "An error occurred",
         "status": "500"
     }
+    
     //Find All
     db.Category.findAll({
         where: {
@@ -120,8 +123,8 @@ router.get('/categories/inDepartment/:department_id', function (req, res) {
     }).then(function (category) {
         if (category.length < 1) {
             response = {
-                "code": "DEP_02",
-                "message": "Don't exist department with this ID: " + req.params.department_id,
+                "code": "CAT_02",
+                "message": "Category with ID: " + req.params.department_id + " does not exist",
                 "status": "500"
             }
             console.log("Response:: " + JSON.stringify(response));

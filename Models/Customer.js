@@ -32,6 +32,13 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: true,
         },
       },
+      user_key: {
+        type: DataTypes.STRING(1000),
+        allowNull: true,
+        validate: {
+          notEmpty: false,
+        },
+      },
       credit_card: DataTypes.TEXT,
       address_1: DataTypes.STRING(100),
       address_2: DataTypes.STRING(100),
@@ -72,13 +79,6 @@ module.exports = (sequelize, DataTypes) => {
   Customer.prototype.getSafeDataValues = function getSafeDataValues() {
     const { password, ...data } = this.dataValues;
     return data;
-  };
-
-  Customer.associate = ({ Order }) => {
-    // associations can be defined here
-    Customer.hasMany(Order, {
-      foreignKey: 'customer_id',
-    });
   };
   return Customer;
 };

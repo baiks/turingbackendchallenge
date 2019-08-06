@@ -4,6 +4,11 @@ var router = express.Router();
 
 /* /attributes Get Attribute list */
 router.get('/attributes', function (req, res) {
+    var response = {
+        "code": "ATTR_01",
+        "message": "An error occurred.",
+        "status": "500"
+    }
     //Find All
     db.Attribute.findAll().then(function (attribute) {
         if (attribute.length < 1) {
@@ -22,7 +27,11 @@ router.get('/attributes', function (req, res) {
 })
 /* /attributes/{attribute_id} Get Attribute list by ID */
 router.get('/attributes/:attribute_id', function (req, res) {
-    console.log('attribute_id ' + req.params.attribute_id);
+    var response = {
+        "code": "ATTR_01",
+        "message": "An error occurred.",
+        "status": "500"
+    }
     //Find One
     db.Attribute.findOne({
         where: {
@@ -46,12 +55,12 @@ router.get('/attributes/:attribute_id', function (req, res) {
 });
 /* /attributes/values/{attribute_id} Get Values Attribute from Atribute */
 router.get('/attributes/values/:attribute_id', function (req, res) {
-    console.log('attribute_id values: ' + req.params.attribute_id);
     var response = {
         "code": "ATTR_01",
-        "message": "An error occurred",
+        "message": "An error occurred.",
         "status": "500"
     }
+    
     //Find All
     db.Attributevalue.findAll({
         exclude: [{
@@ -82,10 +91,9 @@ router.get('/attributes/values/:attribute_id', function (req, res) {
 
 /* /attributes/inProduct/{product_id} Get all Attributes with Produt ID */
 router.get('/attributes/inProduct/:product_id', function (req, res) {
-    console.log('product_id id: ' + req.params.product_id);
     var response = {
         "code": "ATTR_01",
-        "message": "An error occurred",
+        "message": "An error occurred.",
         "status": "500"
     }
     //Find All
