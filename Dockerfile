@@ -17,3 +17,7 @@ COPY --chown=root . .
 
 EXPOSE 8089
 CMD [ "node", "index.js" ]
+
+#Mysql Datbase
+docker pull mysql/mysql-server
+docker run --name=mysql1 -d mysql/mysql-server
