@@ -55,8 +55,10 @@ router.post('/orders', function (req, res) {
                 }
             });
         }
-    })
-})
+    }).catch((err) => {
+        res.status(400).send(err);
+    });
+});
 
 /* /orders/{order_id} Get Order by ID */
 router.get('/orders/:order_id', function (req, res) {
@@ -113,6 +115,8 @@ router.get('/orders/:order_id', function (req, res) {
                     res.status(200).send(finalresponse);
                 }
 
+            }).catch((err) => {
+                res.status(400).send(err);
             });
             break;
         default:
@@ -140,6 +144,8 @@ router.get('/orders/:order_id', function (req, res) {
                     res.status(200).send(order);
                 }
 
+            }).catch((err) => {
+                res.status(400).send(err);
             });
             break;
     }
@@ -196,6 +202,8 @@ router.get('/orders/shortDetail/:order_id', function (req, res) {
             res.status(200).send(response);
         }
 
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 
 });

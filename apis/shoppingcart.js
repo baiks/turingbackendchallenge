@@ -72,6 +72,8 @@ router.post('/shoppingcart/add', function (req, res) {
             console.log("Response:: " + JSON.stringify(shoppingcart));
             res.status(200).send(shoppingcart);
         }
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 /* /shoppingcart/{cart_id} Get List of Products in Shopping Cart*/
@@ -139,7 +141,8 @@ router.get('/shoppingcart/:cart_id', function (req, res) {
             }
             res.status(200).send(finalresponse);
         }
-
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 /* /shoppingcart/update/{item_id} */
@@ -188,6 +191,8 @@ router.put('/shoppingcart/update/:item_id', function (req, res) {
                 res.status(200).send(shoppingcart[0]);
             });
         }
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 /* /shoppingcart/empty/{cart_id} */
@@ -237,6 +242,8 @@ router.delete('/shoppingcart/empty/:cart_id', function (req, res) {
                 res.status(200).send(shoppingcart);
             });
         }
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 /* /shoppingcart/removeProduct/{item_id} */
@@ -281,6 +288,8 @@ router.delete('/shoppingcart/removeProduct/:item_id', function (req, res) {
             console.log("Response:: " + JSON.stringify(shoppingcart));
             res.status(200).send(shoppingcart);
         }
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 //export this router to use in our index.js

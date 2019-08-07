@@ -9,7 +9,7 @@ router.get('/departments', function (req, res) {
     "message": "An error occurred.",
     "status": "500"
   }
-  
+
   //Find All
   db.Department.findAll().then(function (department) {
     if (department.length < 1) {
@@ -24,8 +24,10 @@ router.get('/departments', function (req, res) {
       console.log("Response:: " + JSON.stringify(department));
       res.status(200).send(department);
     }
+  }).catch((err) => {
+    res.status(400).send(err);
   });
-})
+});
 
 /* /departments/{department_id} Get Department by ID */
 router.get('/departments/:department_id', function (req, res) {
@@ -34,7 +36,7 @@ router.get('/departments/:department_id', function (req, res) {
     "message": "An error occurred.",
     "status": "500"
   }
- 
+
   //Find One
   db.Department.findOne({
     where: {
@@ -54,6 +56,8 @@ router.get('/departments/:department_id', function (req, res) {
       res.status(200).send(department);
     }
 
+  }).catch((err) => {
+    res.status(400).send(err);
   });
 });
 

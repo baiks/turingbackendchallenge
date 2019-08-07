@@ -27,7 +27,8 @@ const sequelizeConnection = new Sequelize(
 var db = {
     Sequelize: Sequelize,
     sequelize: sequelizeConnection,
-    Op: Op
+    Op: Op,
+    config: initconfig
 };
 
 db.Department = db.sequelize.import('./Department');
@@ -44,6 +45,7 @@ db.OrderDetail = db.sequelize.import('./OrderDetail');
 db.Shipping = db.sequelize.import('./Shipping');
 db.ShippingRegion = db.sequelize.import('./ShippingRegion');
 db.ShoppingCart = db.sequelize.import('./ShoppingCart');
+db.Tax = db.sequelize.import('./Tax');
 
 
 /* Relationships */
@@ -87,7 +89,8 @@ db.Customer.hasMany(db.Order, { foreignKey: 'customer_id' });
 db.OrderDetail.belongsTo(db.Order, { foreignKey: 'order_id' });
 
 //ShoppingCart
-db.ShoppingCart.belongsTo(db.Product, {foreignKey: 'product_id',onDelete: 'CASCADE',});
+db.ShoppingCart.belongsTo(db.Product, { foreignKey: 'product_id', onDelete: 'CASCADE' });
+
 
 db.sequelize.sync({ force: false }).then(function (err) {
     console.log("Status:: " + err);

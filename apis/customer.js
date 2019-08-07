@@ -5,7 +5,7 @@ var jwt = require("../AccessTokens/JWT");
 var fb = require("../AccessTokens/Facebook");
 const bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: true }));
-router.use(bodyParser.json())
+router.use(bodyParser.json());
 /* /customer create a customer */
 router.put('/customers', function (req, res) {
     var response = {
@@ -62,6 +62,8 @@ router.put('/customers', function (req, res) {
             res.status(200).send(cust);
         }
 
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 /* /customer Update a customer */
@@ -102,6 +104,8 @@ router.put('/customer', function (req, res) {
         }).then(function (customer) {
             console.log("Response:: " + JSON.stringify(customer));
             res.status(200).send(customer);
+        }).catch((err) => {
+            res.status(400).send(err);
         });
 });
 /* /customer Get a customer by ID. The customer is getting by Token.*/
@@ -147,6 +151,8 @@ router.get('/customer', function (req, res) {
             res.status(200).send(customer);
         }
 
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 
@@ -194,6 +200,8 @@ router.post('/customers/login', function (req, res) {
             /** Update user key End **/
             res.status(200).send(cust);
         }
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 })
 /* /customers/facebook Sign in with a facebook login token.*/
@@ -240,6 +248,8 @@ router.post('/customers/facebook', function (req, res) {
                 /** Update user key End **/
                 res.status(200).send(cust);
             }
+        }).catch((err) => {
+            res.status(400).send(err);
         });
     } else {
         response = {
@@ -307,8 +317,8 @@ router.put('/customers/address', function (req, res) {
                     res.status(200).send(customer);
                 }
             });
-
-
+        }).catch((err) => {
+            res.status(400).send(err);
         });
 });
 /* /customers/creditCard Update the credit card from customer */
@@ -361,8 +371,8 @@ router.put('/customers/creditCard', function (req, res) {
                     res.status(200).send(customer);
                 }
             });
-
-
+        }).catch((err) => {
+            res.status(400).send(err);
         });
 });
 //export this router to use in our index.js

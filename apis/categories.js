@@ -39,8 +39,10 @@ router.get('/categories', function (req, res) {
             }
             res.send(response);
         }
+    }).catch((err) => {
+        res.status(400).send(err);
     });
-})
+});
 /* /categories/{category_id} Get Category by ID */
 router.get('/categories/:category_id', function (req, res) {
     var response = {
@@ -66,7 +68,8 @@ router.get('/categories/:category_id', function (req, res) {
             console.log("Response:: " + JSON.stringify(category));
             res.send(category);
         }
-
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 
@@ -103,6 +106,8 @@ router.get('/categories/inProduct/:product_id', function (req, res) {
             res.send(response);
         }
 
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 /* /categories/inDepartment/{inDepartment} Get Categories of a Department */
@@ -113,7 +118,7 @@ router.get('/categories/inDepartment/:department_id', function (req, res) {
         "message": "An error occurred",
         "status": "500"
     }
-    
+
     //Find All
     db.Category.findAll({
         where: {
@@ -135,6 +140,8 @@ router.get('/categories/inDepartment/:department_id', function (req, res) {
             res.send(category);
         }
 
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 

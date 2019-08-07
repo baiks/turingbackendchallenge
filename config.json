@@ -18,5 +18,9 @@
     "FacebookApp": {
         "client_id": "1307380232764848",
         "client_secret": "23e36713b2b21519ee24a7d44daede0b"
+    },
+    "Stripe": {
+        "Publishable_key": "pk_test_sntblw58PujzPlAKyDeCVcUK004zb0laqp",
+        "Secret_key": "sk_test_A7HRzzahS63m5Gfy3sIVGLen00eeTFqQcZ"
     }
 }

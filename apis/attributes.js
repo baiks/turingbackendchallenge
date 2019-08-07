@@ -12,7 +12,7 @@ router.get('/attributes', function (req, res) {
     //Find All
     db.Attribute.findAll().then(function (attribute) {
         if (attribute.length < 1) {
-            var response = {
+            response = {
                 "code": "ATTR_01",
                 "message": "Attributes not set up.",
                 "status": "500"
@@ -23,7 +23,9 @@ router.get('/attributes', function (req, res) {
             console.log("Response:: " + JSON.stringify(attribute));
             res.send(attribute);
         }
-    });
+    }).catch((err) => {
+        res.status(400).send(err);
+    });;
 })
 /* /attributes/{attribute_id} Get Attribute list by ID */
 router.get('/attributes/:attribute_id', function (req, res) {
@@ -51,6 +53,8 @@ router.get('/attributes/:attribute_id', function (req, res) {
             res.send(attribute);
         }
 
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 /* /attributes/values/{attribute_id} Get Values Attribute from Atribute */
@@ -60,7 +64,7 @@ router.get('/attributes/values/:attribute_id', function (req, res) {
         "message": "An error occurred.",
         "status": "500"
     }
-    
+
     //Find All
     db.Attributevalue.findAll({
         exclude: [{
@@ -86,6 +90,8 @@ router.get('/attributes/values/:attribute_id', function (req, res) {
             res.send(attributevalue);
         }
 
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 
@@ -129,6 +135,8 @@ router.get('/attributes/inProduct/:product_id', function (req, res) {
             }
             res.send(jsonarryres);
         }
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 

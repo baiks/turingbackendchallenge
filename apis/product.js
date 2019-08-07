@@ -171,7 +171,8 @@ router.get('/products/inCategory/:category_id', function (req, res) {
             }
             res.status(201).send(response);
         }
-
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 
@@ -209,6 +210,8 @@ router.get('/products/inDepartment/:department_id', function (req, res) {
             res.status(200).send(productcategory[0].category.products);
         }
 
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 
@@ -236,6 +239,8 @@ router.get('/products/:product_id/details', function (req, res) {
         } else {
             res.status(200).send(product);
         }
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 
@@ -280,7 +285,8 @@ router.get('/products/:product_id/locations', function (req, res) {
             response['department_id'] = cat[0].department_id;
             res.status(200).send(response);
         }
-
+    }).catch((err) => {
+        res.status(400).send(err);
     });
 });
 
@@ -313,6 +319,8 @@ router.get('/products/:product_id/reviews', function (req, res) {
                 res.status(200).send(reviews);
             }
 
+        }).catch((err) => {
+            res.status(400).send(err);
         });
     } else {  //Post review
         if (req.headers["user-key"] === undefined) {
@@ -341,6 +349,8 @@ router.get('/products/:product_id/reviews', function (req, res) {
             db.Review.create(req.body).then(function (reviews) {
                 res.status(201).send(reviews);
             });
+        }).catch((err) => {
+            res.status(400).send(err);
         });
     }
 });
