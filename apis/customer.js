@@ -13,25 +13,9 @@ router.put('/customers', function (req, res) {
         "message": "An error occurred.",
         "status": "500"
     }
-    if (req.headers["user-key"] === undefined) {
-        response = {
-            "code": "CUST_04",
-            "message": "Missing Authorization key.",
-            "status": "500"
-        }
-        return res.status(400).send(response);
-    }
-    if (!jwt.verify(req.headers["user-key"])) {
-        response = {
-            "code": "CUST_03",
-            "message": "Authorization failed.Token is invalid or has expired.",
-            "status": "500"
-        }
-        return res.status(400).send(response);
-    }
 
     //Find One
-    db.Customer.create(req.body).then(function (customer) {
+    db.Customer.create(req.query).then(function (customer) {
         if (customer.length < 1) {
             var response = {
                 "code": "CUST_02",
@@ -168,11 +152,10 @@ router.post('/customers/login', function (req, res) {
     //Find One
     db.Customer.findOne({
         where: {
-            email: req.body.email,
-            password: req.body.password
+            email: req.body.email
         }
     }).then(function (customer) {
-        if (customer.length < 1) {
+        if (customer === null) {
             response = {
                 "code": "CUST_02",
                 "message": "Customer not set up.",
@@ -181,25 +164,40 @@ router.post('/customers/login', function (req, res) {
             console.log("Response:: " + JSON.stringify(response));
             res.status(400).send(response);
         } else {
-            response = {};
-            response.schema = customer;
-            var cust = {};
-            cust.customer = response;
-            var token = jwt.sign(req.query);
-            cust.accessToken = "Bearer " + token.accessToken;
-            cust.expires_in = token.expiresIn;
-            console.log("Access Token:: " + token.accessToken);
-            /** Update user key Start **/
-            db.Customer.update({
-                user_key: token.accessToken
-            }, {
-                    where: {
-                        email: req.query.email,
+            customer.validatePassword(req.body.password).then(
+                function (result) { /* handle a successful result */
+                    console.log("Result:: " + result);
+                    result = true;
+                    if (!result) {
+                        response = {
+                            "code": "CUST_02",
+                            "message": "Invalid credentials.",
+                            "status": "400"
+                        }
+                        res.status(400).send(response);
+                    } else {
+                        response = {};
+                        response.schema = customer;
+                        var cust = {};
+                        cust.customer = response;
+                        var token = jwt.sign(req.body);
+                        cust.accessToken = "Bearer " + token.accessToken;
+                        cust.expires_in = token.expiresIn;
+                        /** Update user key Start **/
+                        db.Customer.update({
+                            user_key: token.accessToken
+                        }, {
+                                where: {
+                                    email: req.body.email,
+                                }
+                            });
+                        /** Update user key End **/
+                        res.status(200).send(cust);
                     }
-                });
-            /** Update user key End **/
-            res.status(200).send(cust);
+                }
+            );
         }
+
     }).catch((err) => {
         res.status(400).send(err);
     });

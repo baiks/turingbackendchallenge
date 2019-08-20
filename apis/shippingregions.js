@@ -125,7 +125,7 @@ router.post('/stripe/charge', function (req, res) {
             }
         }]
     }).then(function (customer) {
-        if (customer.length < 1) {
+        if (customer = null) {
             var response = {
                 "code": "SPR_01",
                 "message": "Customer not set up regions not set up.",

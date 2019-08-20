@@ -73,6 +73,8 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   Customer.prototype.validatePassword = async function validatePassword(password) {
+    console.log("Input password: " + password);
+    console.log("DB Password: " + this.password);
     return bcrypt.compare(password, this.password);
   };
 

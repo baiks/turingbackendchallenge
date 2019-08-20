@@ -11,6 +11,7 @@ var orders = require('./apis/orders.js');
 var shoppingcart = require('./apis/shoppingcart.js');
 var tax = require('./apis/tax.js');
 var shippingregions = require('./apis/shippingregions.js');
+var db = require('./Models/DBConnection');
 
 
 //Define routes here
@@ -27,7 +28,7 @@ app.use('/',
     shippingregions
 );
 
-var server = app.listen(8081, function () {
+var server = app.listen(db.config.APIConfigs.port, function () {
     var host = server.address().address
     var port = server.address().port
     console.log("TshirtshopAPI listening at http://%s:%s", host, port)
