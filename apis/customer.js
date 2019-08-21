@@ -13,7 +13,7 @@ router.put('/customers', function (req, res) {
         "message": "An error occurred.",
         "status": "500"
     }
-
+console.log("Request: "+JSON.stringify(req.query));
     //Find One
     db.Customer.create(req.query).then(function (customer) {
         if (customer.length < 1) {
@@ -164,10 +164,9 @@ router.post('/customers/login', function (req, res) {
             console.log("Response:: " + JSON.stringify(response));
             res.status(400).send(response);
         } else {
-            customer.validatePassword(req.body.password).then(
-                function (result) { /* handle a successful result */
+            customer.validatePassword(req.body.password).then(function (result) { /* handle a successful result */
                     console.log("Result:: " + result);
-                    result = true;
+                    //result = true;
                     if (!result) {
                         response = {
                             "code": "CUST_02",
@@ -194,8 +193,7 @@ router.post('/customers/login', function (req, res) {
                         /** Update user key End **/
                         res.status(200).send(cust);
                     }
-                }
-            );
+                });
         }
 
     }).catch((err) => {

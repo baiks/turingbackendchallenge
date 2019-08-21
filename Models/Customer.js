@@ -65,9 +65,11 @@ module.exports = (sequelize, DataTypes) => {
   Customer.beforeCreate(async customer => {
     // eslint-disable-next-line no-param-reassign
     customer.password = await customer.generatePasswordHash();
+	console.log("Encrypted Password: " + customer.password);
   });
 
   Customer.prototype.generatePasswordHash = async function generatePasswordHash() {
+	  console.log("Raw Password: " + this.password);
     const saltRounds = 8;
     return bcrypt.hash(this.password, saltRounds);
   };
